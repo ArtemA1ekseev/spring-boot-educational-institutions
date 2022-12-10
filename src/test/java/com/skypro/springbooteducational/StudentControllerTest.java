@@ -10,7 +10,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StudentControllerTest {
-
+    /*
     private StudentService studentService = new StudentService();
 
     @BeforeEach
@@ -68,4 +68,5 @@ public class StudentControllerTest {
         Collection<Student> collection = studentService.getByAge(18);
         assertEquals(collection.size(), 1);
     }
+    */
 }
