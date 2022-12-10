@@ -38,6 +38,11 @@ public class FacultyController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping
+    public Collection<Faculty> getAllFaculty() {
+        return this.facultyService.getAllFaculties();
+    }
+
     @GetMapping("/color/{color}")
     public Collection<Faculty> getStudentsByAge(@PathVariable("color") String color) {
         return this.facultyService.findByColor(color);

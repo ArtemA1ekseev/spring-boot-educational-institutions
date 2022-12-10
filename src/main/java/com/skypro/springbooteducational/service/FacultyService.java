@@ -47,6 +47,10 @@ public class FacultyService {
         }
     }
 
+    public Collection<Faculty> getAllFaculties() {
+        return this.faculties.values();
+    }
+
     public Collection<Faculty> findByColor(String color) {
         return this.faculties.values().stream()
                 .filter(f -> f.getColor() == color)

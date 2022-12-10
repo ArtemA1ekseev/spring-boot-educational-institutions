@@ -47,6 +47,10 @@ public class StudentService {
         }
     }
 
+    public Collection<Student> getAllStudents() {
+        return this.students.values();
+    }
+
     public Collection<Student> getByAge(int age) {
         return this.students.values().stream()
                 .filter(s -> s.getAge() == age)
