@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
 
-public interface StudentRepository extends JpaRepository<Student, Long> {
+public interface  StudentRepository extends JpaRepository<Student, Long> {
 
-    Collection<Student> getByAge(int age);
+    Collection<Student> findByAge(int age);
+    Collection<Student> findByAgeBetween(int minAge, int maxAge);
 }
