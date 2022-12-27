@@ -1,6 +1,7 @@
 package com.skypro.springbooteducational.service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.skypro.springbooteducational.model.Student;
 import com.skypro.springbooteducational.repository.StudentRepository;
@@ -67,5 +68,23 @@ public class StudentService {
     public List<Student> getLast5Students(){
         logger.debug("getLast5Students method is in progress");
         return this.studentRepository.getLast5Students();
+    }
+
+    public List<String> getAllNamesStartWithA(){
+        logger.debug("getAllNamesStartWithA method is in progress");
+        return this.studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter((n -> n.startsWith("A")))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public int getAvgAge(){
+        logger.debug("getAvgAge method is in progress");
+        return (int) this.studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
     }
 }

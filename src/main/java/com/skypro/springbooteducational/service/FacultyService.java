@@ -53,4 +53,12 @@ public class FacultyService {
         logger.debug("findFacultyByNameIgnoreCaseOrColorIgnoreCase method is in progress");
         return this.facultyRepository.findFacultyByNameIgnoreCaseOrColorIgnoreCase(name, color);
     }
+
+    public String getTheLongestNameFaculty(){
+        logger.debug("getTheLongestNameFaculty method is in progress");
+        return this.facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparingInt(String::length))
+                .orElse(null);
+    }
 }
