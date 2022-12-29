@@ -1,0 +1,135 @@
+package com.skypro.springbooteducational.service;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import com.skypro.springbooteducational.model.Student;
+import com.skypro.springbooteducational.repository.StudentRepository;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Service
+public class StudentService {
+
+    private final StudentRepository studentRepository;
+
+    private final static Logger logger = LoggerFactory.getLogger(StudentService.class);
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
+    public Student addStudent(Student student) {
+        logger.debug("addStudent method is in progress");
+        return this.studentRepository.save(student);
+    }
+
+    public Student editStudent(Long id, Student student) {
+        logger.debug("editStudent method is in progress");
+        return this.studentRepository.save(student);
+    }
+
+    public Student findStudent(Long id) {
+        logger.debug("findStudent method is in progress");
+        return this.studentRepository.findById(id).get();
+    }
+
+    public void deleteStudent(Long id) {
+        logger.debug("deleteStudent method is in progress");
+        this.studentRepository.deleteById(id);
+    }
+
+    public Collection<Student> getAllStudents() {
+        logger.debug("getAllStudents method is in progress");
+        return this.studentRepository.findAll();
+    }
+
+    public Collection<Student> findByAge(int age) {
+        logger.debug("findByAge method is in progress");
+        return this.studentRepository.findByAge(age);
+    }
+
+    public Collection<Student> findByAgeBetween(int minAge, int maxAge) {
+        logger.debug("findByAgeBetween method is in progress");
+        return this.studentRepository.findByAgeBetween(minAge, maxAge);
+    }
+
+    public int getAllStudentsSql(){
+        logger.debug("getAllStudentsSql method is in progress");
+        return this.studentRepository.getAllStudentsSql();
+    }
+
+    public float getAvgAgeStudents(){
+        logger.debug("getAvgAgeStudents method is in progress");
+        return this.studentRepository.getAvgAgeStudents();
+    }
+
+    public List<Student> getLast5Students(){
+        logger.debug("getLast5Students method is in progress");
+        return this.studentRepository.getLast5Students();
+    }
+
+    public List<String> getAllNamesStartWithA(){
+        logger.debug("getAllNamesStartWithA method is in progress");
+        return this.studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter((n -> n.startsWith("A")))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public int getAvgAge(){
+        logger.debug("getAvgAge method is in progress");
+        return (int) this.studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
+    }
+
+    public void getNamesThread(){
+        logger.debug("getNamesThread method is in progress");
+        doThread(1);
+        doThread(2);
+
+        new Thread(() -> {
+            doThread(3);
+            doThread(4);
+        }).start();
+
+        new Thread(() -> {
+            doThread(5);
+            doThread(6);
+        }).start();
+
+    }
+
+    public final Object flag = new Object();
+
+    public void getNamesSyncThread(){
+        logger.debug("getNamesSyncThread method is in progress");
+        doThreadSync(1);
+        doThreadSync(2);
+
+        new Thread(() -> {
+            doThreadSync(3);
+            doThreadSync(4);
+        }).start();
+
+        new Thread(() -> {
+            doThreadSync(5);
+            doThreadSync(6);
+        }).start();
+    }
+
+    private void doThread(long id){
+        System.out.println(this.studentRepository.getReferenceById(id).getName());
+    }
+
+    private void doThreadSync(long id){
+        synchronized (flag) {
+            System.out.println(this.studentRepository.getReferenceById(id).getName());
+        }
+    }
+}
