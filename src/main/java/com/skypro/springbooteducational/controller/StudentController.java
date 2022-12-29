@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -99,5 +98,15 @@ public class StudentController {
     @GetMapping("/getAverageAge")
     public ResponseEntity<Integer> getAvgAge() {
         return ResponseEntity.ok(this.studentService.getAvgAge());
+    }
+
+    @GetMapping("/getAllThread")
+    public void getNamesThread() {
+        this.studentService.getNamesThread();
+    }
+
+    @GetMapping("/getAllThreadSync")
+    public void getNamesSyncThread() {
+        this.studentService.getNamesSyncThread();
     }
 }
