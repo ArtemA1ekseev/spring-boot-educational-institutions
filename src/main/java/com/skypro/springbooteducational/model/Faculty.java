@@ -1,10 +1,16 @@
 package com.skypro.springbooteducational.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Objects;
 
-public class Faculty {
-
+@Entity
+public class Faculty{
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String name, color;
 
     public Faculty() {
