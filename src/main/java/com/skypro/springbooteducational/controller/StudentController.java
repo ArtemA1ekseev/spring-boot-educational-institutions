@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,18 +28,26 @@ public class StudentController {
     @ApiResponses(value = {@ApiResponse(responseCode = "404",
                                         description = "Student not found",
                                         content = @Content)})
-    public Student getById(@PathVariable("id") Long id) {
-        return this.studentService.findStudent(id);
+    public ResponseEntity<Student> getById(@PathVariable("id") Long id) {
+        Student student = this.studentService.findStudent(id);
+        if (student == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(student);
     }
 
     @PostMapping
-    public Student createStudent(@RequestBody Student student) {
-        return this.studentService.addStudent(student);
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        return ResponseEntity.ok(this.studentService.addStudent(student));
     }
 
     @PutMapping("/{id}")
-    public Student editStudent(@PathVariable("id") Long id, @RequestBody Student student) {
-        return this.studentService.editStudent(id, student);
+    public ResponseEntity<Student> editStudent(@PathVariable("id") Long id, @RequestBody Student student) {
+        Student foundStudent = this.studentService.editStudent(id, student);
+        if (foundStudent == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok(foundStudent);
     }
 
     @DeleteMapping("/{id}")
@@ -48,17 +57,20 @@ public class StudentController {
     }
 
     @GetMapping
-    public Collection<Student> getAllStudent() {
-        return this.studentService.getAllStudents();
+    public ResponseEntity<Collection<Student>> getAllStudent() {
+        return ResponseEntity.ok(this.studentService.getAllStudents());
     }
 
     @GetMapping("/age/{age}")
-    public Collection<Student> getStudentsByAge(@PathVariable("age") int age) {
-        return this.studentService.findByAge(age);
+    public ResponseEntity<Collection<Student>> getStudentsByAge(@PathVariable("age") int age) {
+        return ResponseEntity.ok(this.studentService.findByAge(age));
     }
 
     @GetMapping("/between-age")
-    public Collection<Student> getStudentByAgeBetween(@RequestParam Integer minAge, @RequestParam Integer maxAge) {
-        return this.studentService.findByAgeBetween(minAge,maxAge);
+    public ResponseEntity<Collection<Student>> getStudentByAgeBetween(@RequestParam Integer minAge, @RequestParam Integer maxAge) {
+        if (minAge != null && maxAge != null) {
+            return ResponseEntity.ok(this.studentService.findByAgeBetween(minAge, maxAge));
+        }
+        return ResponseEntity.ok(this.studentService.getAllStudents());
     }
 }

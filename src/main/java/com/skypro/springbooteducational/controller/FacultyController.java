@@ -2,6 +2,7 @@ package com.skypro.springbooteducational.controller;
 
 import com.skypro.springbooteducational.model.Faculty;
 import com.skypro.springbooteducational.service.FacultyService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,18 +19,26 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}")
-    public Faculty getById(@PathVariable("id") Long id) {
-        return this.facultyService.findFaculty(id);
+    public ResponseEntity<Faculty> getById(@PathVariable("id") Long id) {
+        Faculty faculty = this.facultyService.findFaculty(id);
+        if (faculty == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(faculty);
     }
 
     @PostMapping
-    public Faculty createFaculty(@RequestBody Faculty faculty) {
-        return this.facultyService.addFaculty(faculty);
+    public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) {
+        return ResponseEntity.ok(this.facultyService.addFaculty(faculty));
     }
 
     @PutMapping("/{id}")
-    public Faculty editFaculty(@PathVariable("id") Long id, @RequestBody Faculty faculty) {
-        return this.facultyService.editFaculty(id, faculty);
+    public ResponseEntity<Faculty> editFaculty(@PathVariable("id") Long id, @RequestBody Faculty faculty) {
+        Faculty foundFaculty = this.facultyService.editFaculty(id, faculty);
+        if (foundFaculty == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok(foundFaculty);
     }
 
     @DeleteMapping("/{id}")
@@ -39,18 +48,18 @@ public class FacultyController {
     }
 
     @GetMapping
-    public Collection<Faculty> getAllFaculty() {
-        return this.facultyService.getAllFaculties();
+    public ResponseEntity<Collection<Faculty>> getAllFaculty() {
+        return ResponseEntity.ok(this.facultyService.getAllFaculties());
     }
 
     @GetMapping("/color/{color}")
-    public Collection<Faculty> getStudentsByAge(@PathVariable("color") String color) {
-        return this.facultyService.findByColor(color);
+    public ResponseEntity<Collection<Faculty>> getFacultyByColor(@PathVariable("color") String color) {
+        return ResponseEntity.ok(this.facultyService.findByColor(color));
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<Collection<Faculty>> FindFaculty(@RequestParam(required = false) String name,
+    public ResponseEntity<Collection<Faculty>> findFaculty(@RequestParam(required = false) String name,
                                                            @RequestParam(required = false) String color) {
-        return ResponseEntity.ok(facultyService.findFacultyByNameIgnoreCaseOrColorIgnoreCase(name, color));
+        return ResponseEntity.ok(this.facultyService.findFacultyByNameIgnoreCaseOrColorIgnoreCase(name, color));
     }
 }
