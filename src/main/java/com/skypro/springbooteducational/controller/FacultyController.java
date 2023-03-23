@@ -47,4 +47,10 @@ public class FacultyController {
     public Collection<Faculty> getStudentsByAge(@PathVariable("color") String color) {
         return this.facultyService.findByColor(color);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Collection<Faculty>> FindFaculty(@RequestParam(required = false) String name,
+                                                           @RequestParam(required = false) String color) {
+        return ResponseEntity.ok(facultyService.findFacultyByNameIgnoreCaseOrColorIgnoreCase(name, color));
+    }
 }
