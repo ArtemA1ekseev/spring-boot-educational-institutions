@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/student")
@@ -72,5 +74,20 @@ public class StudentController {
             return ResponseEntity.ok(this.studentService.findByAgeBetween(minAge, maxAge));
         }
         return ResponseEntity.ok(this.studentService.getAllStudents());
+    }
+
+    @GetMapping("request/getAll")
+    public ResponseEntity getAllStudentsSql() {
+        return ResponseEntity.ok(this.studentService.getAllStudentsSql());
+    }
+
+    @GetMapping("request/getAvg")
+    public ResponseEntity getAvgAgeStudents() {
+        return ResponseEntity.ok(this.studentService.getAvgAgeStudents());
+    }
+
+    @GetMapping("request/getLast5")
+    public ResponseEntity<List<Student>> getLast5Students() {
+        return ResponseEntity.ok(this.studentService.getLast5Students());
     }
 }

@@ -2,7 +2,6 @@ package com.skypro.springbooteducational.controller;
 
 import com.skypro.springbooteducational.model.Avatar;
 import com.skypro.springbooteducational.service.AvatarService;
-import com.skypro.springbooteducational.service.StudentService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 @RequestMapping("avatar")
@@ -59,5 +59,10 @@ public class AvatarController {
             response.setContentLength(avatar.getData().length);
             is.transferTo(os);
         }
+    }
+
+    @GetMapping(value = "/avatarPerPage")
+    public ResponseEntity<List<Avatar>> getAllAvatars(@RequestParam("page") Integer pageNumber, @RequestParam("size") Integer sizeNumber){
+        return ResponseEntity.ok(this.avatarService.getAllAvatars(pageNumber, sizeNumber));
     }
 }
